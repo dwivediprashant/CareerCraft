@@ -1,12 +1,19 @@
-import pdfplumber
+import pymupdf
 from docx import Document
-import io 
+import io
+import re
 
 def extract_textpdf(file_bytes):
-    with pdfplumber.open(io.BytesIO(file_bytes)) as pdf:
-        #this will extract all the pages and join them
+    doc = pymupdf.open(stream=file_bytes, filetype="pdf")
+    blocks = []
 
-        return "\n".join(page.extract_text() or "" for page in pdf.pages)
+    for page in doc:
+        for b in page.get_text("blocks"):
+            text = b[4]  # block text
+            text = re.sub(r"[^\x00-\x7F]+", " ", text)
+            blocks.append(text)
+
+    return "\n".join(blocks)
 
 def extract_textdocs(file_bytes):
     doc = Document(io.BytesIO(file_bytes))
