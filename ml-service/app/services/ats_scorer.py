@@ -1,7 +1,7 @@
 from sklearn.feature_extraction.text import TfidfVectorizer
 from collections import Counter
 import re
-import textstat
+from textstat.textstat import textstat
 
 
 # --- SECTION ---
@@ -234,12 +234,12 @@ def feedback_sections(analysis: dict) -> list[str]:
 def feedback_skills(skill_score: float, skills: list[str]) -> list[str]:
     feedback = []
 
-    if len(skills) < 8:
+    if len(skills) < 10:
         feedback.append(
             "Include more relevant technical skills to improve keyword coverage."
         )
 
-    if skill_score < 20:
+    if skill_score < 24:
         feedback.append(
             "Balance skills across languages, frameworks, databases, and tools."
         )
@@ -247,14 +247,14 @@ def feedback_skills(skill_score: float, skills: list[str]) -> list[str]:
     return feedback
 
 def feedback_keywords(keyword_score: float) -> list[str]:
-    if keyword_score < 12:
+    if keyword_score < 15:
         return [
             "Improve keyword alignment by repeating core technical terms in experience and project descriptions."
         ]
     return []
 
 def feedback_readability(readability_score: float) -> list[str]:
-    if readability_score < 12:
+    if readability_score < 15:
         return [
             "Improve readability by shortening sentences and breaking dense paragraphs into bullet points."
         ]

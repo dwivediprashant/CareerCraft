@@ -52,9 +52,10 @@ async def analyze_text(request: ResumeAnalyzeRequest):
 
         analysis = get_analysis(content)
         ats = compute_ats_score(analysis, content)
+
+        analysis.pop("raw_sections")
         
         return {
-            "content": request.content,
             **analysis,
             **ats
         }
