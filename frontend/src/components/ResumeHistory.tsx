@@ -14,12 +14,12 @@ interface Resume {
 export default function ResumeHistory() {
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+  const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
   const fetchResumes = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${apiBase}/api/resumes`);
+      const res = await fetch(`${apiBase}/resumes`);
       const body = await res.json();
       if (!res.ok || !body.success) {
         console.error('Failed to fetch resumes', body);

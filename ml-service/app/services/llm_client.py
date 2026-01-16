@@ -61,7 +61,7 @@ class LLMClient:
             resp = requests.post(
                 self.generate_url,
                 json=payload,
-                timeout=60,
+                timeout=120,  # Increased from 60 to 120 seconds
             )
             resp.raise_for_status()
 

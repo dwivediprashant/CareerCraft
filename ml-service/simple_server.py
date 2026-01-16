@@ -8,9 +8,11 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile, Form
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
+from typing import Dict, Any
+from datetime import datetime
 
 # Import only our cover letter functionality
 from app.api.cover_letter import router as cover_letter_router
@@ -30,6 +32,10 @@ app.add_middleware(
 # Include only working routes
 app.include_router(health_router, prefix="/health", tags=["System"])
 app.include_router(cover_letter_router, prefix="/cover-letter", tags=["Cover Letter"])
+
+# Import resume router for real resume analysis
+from app.api.resume import router as resume_router
+app.include_router(resume_router, prefix="/resume", tags=["Resume"])
 
 @app.get("/")
 async def root():

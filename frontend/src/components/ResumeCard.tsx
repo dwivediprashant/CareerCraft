@@ -41,8 +41,8 @@ export default function ResumeCard({ resume, onDelete }: ResumeCardProps) {
     
     setIsDeleting(true);
     try {
-      const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-      await axios.delete(`${apiBase}/api/resumes/${resume._id}`);
+      const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+      await axios.delete(`${apiBase}/resumes/${resume._id}`);
       
       // Notify parent component to refresh the list
       if (onDelete && resume._id) {
