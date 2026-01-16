@@ -15,7 +15,7 @@ export default function ResumeUploadCard() {
   const [error, setError] = useState<string>('');
   const [uploadedResume, setUploadedResume] = useState<UploadedResume | null>(null);
 
-  const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+  const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     setError('');
@@ -41,7 +41,7 @@ export default function ResumeUploadCard() {
     console.log('🚀 Starting upload for file:', file.name);
     console.log('🚀 File size:', (file.size / 1024 / 1024).toFixed(2) + ' MB');
     console.log('🚀 File type:', file.type);
-    console.log('🚀 API endpoint:', `${apiBase}/api/resumes/upload`);
+    console.log('🚀 API endpoint:', `${apiBase}/resumes/upload`);
     
     try {
       const form = new FormData();
@@ -53,7 +53,7 @@ export default function ResumeUploadCard() {
         console.log('  -', pair[0], ':', pair[1]);
       }
 
-      console.log('📡 Sending request to:', `${apiBase}/api/resumes/upload`);
+      console.log('📡 Sending request to:', `${apiBase}/resumes/upload`);
       console.log('📡 Request method: POST');
       console.log('📡 Request headers: Content-Type: multipart/form-data');
       
@@ -65,7 +65,7 @@ export default function ResumeUploadCard() {
       }, 120000); // 2 minutes
 
       // Use axios instead of fetch
-      const response = await axios.post(`${apiBase}/api/resumes/upload`, form, {
+      const response = await axios.post(`${apiBase}/resumes/upload`, form, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Accept': 'application/json',
