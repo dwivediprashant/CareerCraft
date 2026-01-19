@@ -36,6 +36,7 @@ export default function ProfilePage() {
         leetcode: '',
         codeforces: '',
         codechef: '',
+        otherPlatforms: [],
     });
 
     // Delete confirmation dialog state
@@ -92,6 +93,7 @@ export default function ProfilePage() {
                     leetcode: data.profile.leetcode || '',
                     codeforces: data.profile.codeforces || '',
                     codechef: data.profile.codechef || '',
+                    otherPlatforms: data.profile.otherPlatforms || [],
                 });
             } catch (err) {
                 if (err instanceof Error && err.message === 'FORBIDDEN') {
@@ -115,6 +117,25 @@ export default function ProfilePage() {
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleOtherPlatformChange = (index: number, field: 'name' | 'url', value: string) => {
+        const updatedPlatforms = [...(formData.otherPlatforms || [])];
+        updatedPlatforms[index] = { ...updatedPlatforms[index], [field]: value };
+        setFormData(prev => ({ ...prev, otherPlatforms: updatedPlatforms }));
+    };
+
+    const addOtherPlatform = () => {
+        setFormData(prev => ({
+            ...prev,
+            otherPlatforms: [...(prev.otherPlatforms || []), { name: '', url: '' }]
+        }));
+    };
+
+    const removeOtherPlatform = (index: number) => {
+        const updatedPlatforms = [...(formData.otherPlatforms || [])];
+        updatedPlatforms.splice(index, 1);
+        setFormData(prev => ({ ...prev, otherPlatforms: updatedPlatforms }));
     };
 
     const handleSave = async () => {
@@ -378,6 +399,42 @@ export default function ProfilePage() {
                                 </div>
                             </div>
 
+                            <div className="mt-4">
+                                <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">Other Platforms</label>
+                                <div className="space-y-3">
+                                    {formData.otherPlatforms?.map((platform, index) => (
+                                        <div key={index} className="flex gap-3">
+                                            <input
+                                                type="text"
+                                                placeholder="Platform Name"
+                                                value={platform.name}
+                                                onChange={(e) => handleOtherPlatformChange(index, 'name', e.target.value)}
+                                                className="flex-1 rounded-lg border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-white"
+                                            />
+                                            <input
+                                                type="text"
+                                                placeholder="URL"
+                                                value={platform.url}
+                                                onChange={(e) => handleOtherPlatformChange(index, 'url', e.target.value)}
+                                                className="flex-[2] rounded-lg border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-white"
+                                            />
+                                            <button
+                                                onClick={() => removeOtherPlatform(index)}
+                                                className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                                            >
+                                                <FontAwesomeIcon icon={faTrash} className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    ))}
+                                    <button
+                                        onClick={addOtherPlatform}
+                                        className="text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 flex items-center gap-1"
+                                    >
+                                        + Add Platform
+                                    </button>
+                                </div>
+                            </div>
+
                             <div className="mt-6 flex justify-end">
                                 <button onClick={handleSave} disabled={saving}
                                     className="rounded-lg bg-green-600 px-6 py-2 text-sm font-medium text-white hover:bg-green-700 transition-colors disabled:opacity-50">
@@ -471,7 +528,15 @@ export default function ProfilePage() {
                                                 CodeChef
                                             </a>
                                         )}
-                                        {!profile.github && !profile.leetcode && !profile.codeforces && !profile.codechef && (
+                                        {profile.otherPlatforms && profile.otherPlatforms.map((platform, index) => (
+                                            <a key={index} href={platform.url} target="_blank" rel="noopener noreferrer"
+                                                className="group inline-flex items-center gap-2 rounded-xl bg-zinc-100 px-4 py-2.5 text-sm font-medium text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700 transition-all hover:scale-105">
+                                                <Globe className="w-5 h-5 text-zinc-500" />
+                                                {platform.name}
+                                            </a>
+                                        ))}
+
+                                        {!profile.github && !profile.leetcode && !profile.codeforces && !profile.codechef && (!profile.otherPlatforms || profile.otherPlatforms.length === 0) && (
                                             <div className="flex flex-col items-center justify-center w-full py-6 text-center rounded-xl bg-zinc-50 border border-dashed border-zinc-200 dark:bg-zinc-800/50 dark:border-zinc-800">
                                                 <p className="text-zinc-500 dark:text-zinc-400 text-sm">No functional coding profiles linked yet.</p>
                                                 <button onClick={() => setIsEditing(true)} className="mt-2 text-xs font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 hover:underline">
