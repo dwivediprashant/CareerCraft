@@ -555,7 +555,7 @@ export default function ProfilePage() {
                         <div className="flex items-center justify-between mb-4">
                             <h2 className="text-xl font-semibold text-zinc-900 dark:text-white">Recent Resumes</h2>
                             {resumeCount > 3 && (
-                                <Link href="/my-resumes" className="text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400">
+                                <Link href="/resume-upload" className="text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400">
                                     View All ({resumeCount}) →
                                 </Link>
                             )}
@@ -580,7 +580,7 @@ export default function ProfilePage() {
                         )}
                         {resumes.length > 0 && resumeCount <= 3 && (
                             <div className="mt-4 text-center">
-                                <Link href="/my-resumes" className="text-sm text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300">
+                                <Link href="/resume-upload" className="text-sm text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300">
                                     Manage Resumes →
                                 </Link>
                             </div>
