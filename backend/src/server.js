@@ -2,7 +2,22 @@ import connectDB from "./config/db.js";
 import "dotenv/config";
 import app from "./app.js";
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 10000; // Default to Render's port
+
+// Validate critical environment variables
+const validateEnv = () => {
+  const required = ['MONGODB_URI', 'JWT_SECRET'];
+  const missing = required.filter(key => !process.env[key]);
+  
+  if (missing.length > 0) {
+    console.error('❌ Missing required environment variables:', missing.join(', '));
+    console.error('Please set these in your Render dashboard:');
+    missing.forEach(key => console.error(`- ${key}`));
+    process.exit(1);
+  }
+  
+  console.log('✅ Environment variables validated');
+};
 
 // const dropProblematicIndex = async () => {
 //   try {
@@ -22,16 +37,44 @@ const PORT = process.env.PORT || 5000;
 //   }
 // };
 
-connectDB()
-  .then(async () => {
+// Start server with better error handling
+const startServer = async () => {
+  try {
+    console.log('🚀 Starting CareerCraft Backend...');
+    console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`🔌 Port: ${PORT}`);
+    
+    // Validate environment variables
+    validateEnv();
+    
+    console.log('🔗 Connecting to MongoDB...');
+    await connectDB();
+    console.log('✅ MongoDB connected successfully');
+
     // Drop the problematic index
     // await dropProblematicIndex();
 
     app.listen(PORT, () => {
       console.log(`🚀 Server is running on port ${PORT}`);
+      console.log(`📊 Health check: http://localhost:${PORT}/api/health`);
     });
-  })
-  .catch((err) => {
-    console.error("❌ MongoDB connection failed:", err.message);
+  } catch (error) {
+    console.error("❌ Failed to start server:", error.message);
+    console.error("Full error:", error);
     process.exit(1);
-  });
+  }
+};
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (err) => {
+  console.error('❌ Unhandled Promise Rejection:', err);
+  process.exit(1);
+});
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (err) => {
+  console.error('❌ Uncaught Exception:', err);
+  process.exit(1);
+});
+
+startServer();
