@@ -1,4 +1,4 @@
-const ML_SERVICE_URL = process.env.NEXT_PUBLIC_ML_SERVICE_URL;
+const ML_SERVICE_URL = process.env.NEXT_PUBLIC_ML_SERVICE_URL || 'http://localhost:8000';
 
 export interface ResumeAnalysisResponse {
   personal_info: {

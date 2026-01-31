@@ -1,7 +1,7 @@
 import { getToken } from "./auth";
 import { SavedCoverLetter } from "./coverLetterApi";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://careercraft-backend-1ahp.onrender.com/api';
 
 export interface UserProfile {
     _id: string;
